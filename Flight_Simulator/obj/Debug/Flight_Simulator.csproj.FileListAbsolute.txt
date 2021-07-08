@@ -1,0 +1,2 @@
+D:\Programming\ItSTEP\C#\Exam(Ivan_Zaporozhets)\Flight_Simulator\Flight_Simulator\obj\Debug\Flight_Simulator.csproj.AssemblyReference.cache
+D:\Programming\ItSTEP\C#\Exam(Ivan_Zaporozhets)\Flight_Simulator\Flight_Simulator\obj\Debug\Flight_Simulator.csproj.CoreCompileInputs.cache

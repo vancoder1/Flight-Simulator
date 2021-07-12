@@ -3,23 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using dispatcher;
 
 namespace airplane
 {
-    delegate void StatusCheck();
+    delegate void StatusCheck(Airplane airplane);
     class Airplane
     {
         public event StatusCheck SpeedChange;
         public event StatusCheck HeightChange;
+
+        public Timer DispChangeTimer;
         public Queue<Dispatcher> Disps { get; set; }
         public int Speed { get; private set; }
+        public int Penalty_points { get; set; }
         public int Height { get; private set; }
         public Airplane(Dispatcher disp)
         {
+            Disps = new Queue<Dispatcher>();
             Speed = 0;
             Height = 0;
             Disps.Enqueue(disp);
+            DispChangeTimer = new System.Timers.Timer();
+            DispChangeTimer.Interval = 20000;
         }
 
         public void Fly()
@@ -64,6 +71,11 @@ namespace airplane
         {
             Disps.Enqueue(disp);
             Disps.Dequeue();
+        }
+
+        public override string ToString()
+        {
+            return "s";
         }
     }
 }

@@ -25,23 +25,30 @@ namespace Flight_Simulator
             AirplaneInterface apI = new AirplaneInterface();
             bool flag = true;
             int counter = 0;
+            airplane.DispChangeTimer.Elapsed += (source, e) => AirFlight(source, e,
+                        airplane, dispatchers, counter);
+            airplane.DispChangeTimer.Start();
+
+            airplane.ParamChange += dispatchers[counter].Check;
             do
             {
                 try
                 {
-                    airplane.DispChangeTimer.Elapsed += (source, e) => AirFlight(source, e, 
-                        airplane, dispatchers, counter);
-                    airplane.DispChangeTimer.Start();
-
-                    airplane.ParamChange += dispatchers[counter].Check;
+                    if (counter == -1)
+                    {                       
+                        apI.PrintEndOfGame(airplane);
+                        flag = false;
+                        break;
+                    }
                     airplane.Fly();
-                    apI.PrintAirplaneInfo(airplane);
+                    apI.PrintAirplaneInfo(airplane, dispatchers[counter]);
                 }
                 catch (AirplaneCrashedException)
                 {
                     Console.WriteLine("Airplane crashed");
-                    Console.WriteLine("Game ended");
+                    apI.PrintEndOfGame(airplane, false);
                     flag = false;
+                    break;
                 }                
             } while (flag);
             

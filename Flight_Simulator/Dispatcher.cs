@@ -10,7 +10,8 @@ namespace dispatcher
     class Dispatcher
     {
         public string Name { get; private set; }
-        public int Weather_adjustments { get; private set; }
+        public int Weather_Adjustments { get; private set; }
+        public int Recommended_Height  { get; private set; }
         public int Max_speed { get; private set; }
         public Dispatcher(string name)
         {
@@ -23,21 +24,21 @@ namespace dispatcher
                 throw new ArgumentException();
             }
             Random random = new Random();
-            Weather_adjustments = random.Next(-200, 200);
+            Weather_Adjustments = random.Next(-200, 200);
             Max_speed = 1000;
         }
         public string Check(Airplane ap)
         {
-            int recommended_height = 7 * ap.Speed + Weather_adjustments;
-            if (+(ap.Height - recommended_height) > 300 && +(ap.Height - recommended_height) < 600)
+            Recommended_Height = 7 * ap.Speed + Weather_Adjustments;
+            if (+(ap.Height - Recommended_Height) > 300 && +(ap.Height - Recommended_Height) < 600)
             {
                 ap.Penalty_points += 25;
             }
-            else if (+(ap.Height - recommended_height) >= 600 && +(ap.Height - recommended_height) <= 1000)
+            else if (+(ap.Height - Recommended_Height) >= 600 && +(ap.Height - Recommended_Height) <= 1000)
             {
                 ap.Penalty_points += 50;
             }
-            else if (+(ap.Height - recommended_height) > 1000)
+            else if (+(ap.Height - Recommended_Height) > 1000)
             {
                 throw new AirplaneCrashedException();
             }

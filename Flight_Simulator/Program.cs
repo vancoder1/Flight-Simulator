@@ -22,18 +22,30 @@ namespace Flight_Simulator
             };
 
             Airplane airplane = new Airplane(dispatchers[0]);
-            for (int i = 1; i < dispatchers.Count; i++)
-            {               
-                airplane.DispChangeTimer.Elapsed += (source, e) => AirFlightFromLondonToKiev(source, e, airplane, dispatchers[i]);
-                airplane.DispChangeTimer.Enabled = true;
+            AirplaneInterface apI = new AirplaneInterface();
+            while (true)
+            {
+                for (int i = 1; i < dispatchers.Count; i++)
+                {
+                    try
+                    {
+                        airplane.DispChangeTimer.Elapsed += (source, e) => AirFlight(source, e, airplane, dispatchers[i]);
+                        airplane.DispChangeTimer.Enabled = true;
 
-                airplane.HeightChange += dispatchers[i].Check;
-                airplane.SpeedChange += dispatchers[i].Check;
-                
-                airplane.Fly();
+                        airplane.HeightChange += dispatchers[i].Check;
+                        airplane.SpeedChange += dispatchers[i].Check;
+                        airplane.Fly();
+                        apI.PrintAirplaneInfo(airplane);
+                    }
+                    catch (AirplaneCrashedException)
+                    {
+                        Console.WriteLine("Airplane crashed");
+                    }
+                }
             }
         }
-        static void AirFlightFromLondonToKiev(Object source, System.Timers.ElapsedEventArgs e, Airplane airplane, Dispatcher dispatcher)
+            
+        static void AirFlight(Object source, System.Timers.ElapsedEventArgs e, Airplane airplane, Dispatcher dispatcher)
         {
             airplane.AddDisp(dispatcher);
         }

@@ -28,9 +28,28 @@ namespace dispatcher
             Weather_adjustments = random.Next(-200, 200);
             Max_speed = 1000;
         }
-        public void Check(Airplane ap)
+        public string Check(Airplane ap)
         {
-            
+            int recommended_height = 7 * ap.Speed + Weather_adjustments;
+            if (+(ap.Height - recommended_height) > 300 && +(ap.Height - recommended_height) < 600)
+            {
+                ap.Penalty_points += 25;
+            }
+            else if (+(ap.Height - recommended_height) >= 600 && +(ap.Height - recommended_height) <= 1000)
+            {
+                ap.Penalty_points += 50;
+            }
+            else if (+(ap.Height - recommended_height) > 1000)
+            {
+                throw new AirplaneCrashedException();
+            }
+
+            if (ap.Speed > 1000)
+            {
+                ap.Penalty_points += 100;
+                return "Slow down airplane immediately";
+            }
+            return "It's ok";
         }
     }
 }

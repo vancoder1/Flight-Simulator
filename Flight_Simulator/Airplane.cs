@@ -8,7 +8,7 @@ using dispatcher;
 
 namespace airplane
 {
-    delegate void StatusCheck(Airplane airplane);
+    delegate string StatusCheck(Airplane airplane);
     class Airplane
     {
         public event StatusCheck SpeedChange;
@@ -17,8 +17,8 @@ namespace airplane
         public Timer DispChangeTimer;
         public Queue<Dispatcher> Disps { get; set; }
         public int Speed { get; private set; }
-        public int Penalty_points { get; set; }
         public int Height { get; private set; }
+        public int Penalty_points { get; set; }
         public Airplane(Dispatcher disp)
         {
             Disps = new Queue<Dispatcher>();
@@ -66,6 +66,8 @@ namespace airplane
             {
                 Height -= 500;
             }
+
+
         }
         public void AddDisp(Dispatcher disp)
         {
@@ -77,5 +79,22 @@ namespace airplane
         {
             return "s";
         }
+    }
+
+    class AirplaneInterface
+    {
+        public void PrintAirplaneInfo(Airplane airplane)
+        {
+            Console.WriteLine("\nHeight: " + airplane.Height);
+            Console.WriteLine("Speed: " + airplane.Speed);
+        }
+    }
+
+    public class AirplaneCrashedException : Exception
+    {
+        public AirplaneCrashedException() { }
+
+        public AirplaneCrashedException(string message)
+            : base(message) { }
     }
 }

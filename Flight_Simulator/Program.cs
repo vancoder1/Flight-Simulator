@@ -19,11 +19,11 @@ namespace Flight_Simulator
                 new Dispatcher("Rome dispatcher"),
                 new Dispatcher("Warsaw dispatcher"),
                 new Dispatcher("Kiev dispatcher")
-            };         
+            };
 
+            Airplane airplane = new Airplane(dispatchers[0]);
             for (int i = 1; i < dispatchers.Count; i++)
-            {
-                Airplane airplane = new Airplane(dispatchers[0]);
+            {               
                 airplane.DispChangeTimer.Elapsed += (source, e) => AirFlightFromLondonToKiev(source, e, airplane, dispatchers[i]);
                 airplane.DispChangeTimer.Enabled = true;
 

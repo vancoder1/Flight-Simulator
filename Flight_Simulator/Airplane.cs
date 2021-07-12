@@ -8,11 +8,10 @@ using dispatcher;
 
 namespace airplane
 {
-    delegate string StatusCheck(Airplane airplane);
+    delegate string StatusChangeHandler(Airplane airplane);
     class Airplane
     {
-        public event StatusCheck SpeedChange;
-        public event StatusCheck HeightChange;
+        public event StatusChangeHandler ParamChange;
 
         public Timer DispChangeTimer;
         public Queue<Dispatcher> Disps { get; set; }
@@ -40,7 +39,10 @@ namespace airplane
             }
             else if (keyInfo.Key == ConsoleKey.DownArrow)
             {
-                Speed -= 50;
+                if (Speed - 50 >= 0)
+                {
+                    Speed -= 50;
+                }                
             }
             else if (keyInfo.Modifiers.HasFlag(ConsoleModifiers.Shift) && keyInfo.Key == ConsoleKey.UpArrow)
             {
@@ -48,7 +50,10 @@ namespace airplane
             }
             else if (keyInfo.Modifiers.HasFlag(ConsoleModifiers.Shift) && keyInfo.Key == ConsoleKey.DownArrow)
             {
-                Speed -= 150;
+                if (Speed - 150 >= 0)
+                {
+                    Speed -= 150;
+                }
             }
             else if (keyInfo.Key == ConsoleKey.PageUp)
             {
@@ -56,7 +61,10 @@ namespace airplane
             }
             else if (keyInfo.Key == ConsoleKey.PageDown)
             {
-                Height -= 250;
+                if (Height - 250 >= 0)
+                {
+                    Height -= 250;
+                }                
             }
             else if (keyInfo.Modifiers.HasFlag(ConsoleModifiers.Shift) && keyInfo.Key == ConsoleKey.PageUp)
             {
@@ -64,9 +72,13 @@ namespace airplane
             }
             else if (keyInfo.Modifiers.HasFlag(ConsoleModifiers.Shift) && keyInfo.Key == ConsoleKey.PageDown)
             {
-                Height -= 500;
+                if (Height - 500 >= 0)
+                {
+                    Height -= 500;
+                }              
             }
 
+            ParamChange?.Invoke(this);
 
         }
         public void AddDisp(Dispatcher disp)

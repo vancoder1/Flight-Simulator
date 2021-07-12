@@ -23,31 +23,39 @@ namespace Flight_Simulator
 
             Airplane airplane = new Airplane(dispatchers[0]);
             AirplaneInterface apI = new AirplaneInterface();
-            while (true)
+            bool flag = true;
+            int counter = 0;
+            do
             {
-                for (int i = 1; i < dispatchers.Count; i++)
+                try
                 {
-                    try
-                    {
-                        airplane.DispChangeTimer.Elapsed += (source, e) => AirFlight(source, e, airplane, dispatchers[i]);
-                        airplane.DispChangeTimer.Enabled = true;
+                    airplane.DispChangeTimer.Elapsed += (source, e) => AirFlight(source, e, 
+                        airplane, dispatchers, counter);
+                    airplane.DispChangeTimer.Start();
 
-                        airplane.HeightChange += dispatchers[i].Check;
-                        airplane.SpeedChange += dispatchers[i].Check;
-                        airplane.Fly();
-                        apI.PrintAirplaneInfo(airplane);
-                    }
-                    catch (AirplaneCrashedException)
-                    {
-                        Console.WriteLine("Airplane crashed");
-                    }
+                    airplane.ParamChange += dispatchers[counter].Check;
+                    airplane.Fly();
+                    apI.PrintAirplaneInfo(airplane);
                 }
-            }
-        }
+                catch (AirplaneCrashedException)
+                {
+                    Console.WriteLine("Airplane crashed");
+                    Console.WriteLine("Game ended");
+                    flag = false;
+                }                
+            } while (flag);
             
-        static void AirFlight(Object source, System.Timers.ElapsedEventArgs e, Airplane airplane, Dispatcher dispatcher)
+        }            
+        static void AirFlight(Object source, System.Timers.ElapsedEventArgs e, Airplane airplane,
+            List<Dispatcher> dispatchers, int counter)
         {
-            airplane.AddDisp(dispatcher);
+            if (counter >= dispatchers.Count)
+            {
+                counter = -1;
+                return;
+            }
+            counter++;
+            airplane.AddDisp(dispatchers[counter]);
         }
     }
 }

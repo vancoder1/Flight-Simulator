@@ -12,8 +12,6 @@ namespace dispatcher
         public string Name { get; private set; }
         public int Weather_adjustments { get; private set; }
         public int Max_speed { get; private set; }
-        public int Max_height { get; private set; }
-
         public Dispatcher(string name)
         {
             if (name.Length > 2)
@@ -43,8 +41,12 @@ namespace dispatcher
             {
                 throw new AirplaneCrashedException();
             }
+            else if (ap.Height > 0 && ap.Speed == 0)
+            {
+                throw new AirplaneCrashedException();
+            }
 
-            if (ap.Speed > 1000)
+            if (ap.Speed > Max_speed)
             {
                 ap.Penalty_points += 100;
                 return "Slow down airplane immediately";

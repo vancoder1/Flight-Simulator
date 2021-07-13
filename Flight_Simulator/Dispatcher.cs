@@ -46,6 +46,10 @@ namespace dispatcher
             {
                 throw new AirplaneCrashedException();
             }
+            else if (ap.Penalty_points > 1000)
+            {
+                throw new UnfitToFlyException();
+            }
 
             if (ap.Speed > Max_speed)
             {

@@ -14,6 +14,7 @@ namespace Flight_Simulator
         static void Main(string[] args)
         {
             int counter = 0;
+
             List<Dispatcher> dispatchers = new List<Dispatcher>() {
                 new Dispatcher("London dispatcher"),
                 new Dispatcher("Berlin dispatcher"),
@@ -22,14 +23,17 @@ namespace Flight_Simulator
                 new Dispatcher("Kiev dispatcher")
             };
 
-            Airplane airplane = new Airplane(dispatchers[0]);
+            Airplane airplane = new Airplane(dispatchers[counter]);
+
+            airplane.AddDisp(dispatchers[counter]);
             AirplaneInterface apI = new AirplaneInterface();
             bool flag = true;
 
             airplane.ParamChange += dispatchers[counter].Check;
             airplane.DispChangeTimer.Elapsed += (source, e) => AirFlight(source, e,
                         airplane, dispatchers, ref counter);
-            airplane.DispChangeTimer.Start();           
+            airplane.DispChangeTimer.Elapsed += (source, e) => apI.PrintAirplaneInfo(airplane, dispatchers[counter]);
+            airplane.DispChangeTimer.Enabled = true;           
             do
             {
                 try
@@ -53,7 +57,14 @@ namespace Flight_Simulator
                     apI.PrintEndOfGame(airplane, false);
                     flag = false;
                     break;
-                }                
+                }
+                catch (UnfitToFlyException)
+                {
+                    Console.WriteLine("Unfit to fly");
+                    apI.PrintEndOfGame(airplane, false);
+                    flag = false;
+                    break;
+                }
             } while (flag);
             
         }            
@@ -64,11 +75,12 @@ namespace Flight_Simulator
             {
                 counter++;
                 airplane.AddDisp(dispatchers[counter]);
+                dispatchers[counter].Check(airplane);
                 return;
             }
             else
             {
-                airplane.DispChangeTimer.Stop();
+                airplane.DispChangeTimer.Enabled = false;
             }
         }
     }

@@ -14,10 +14,19 @@ namespace airplane
         public event StatusChangeHandler ParamChange;
 
         public Timer DispChangeTimer;
+        private int Interval = 15000;
         public Queue<Dispatcher> Disps { get; set; }
         public int Speed { get; private set; }
         public int Height { get; private set; }
         public int Penalty_points { get; set; }
+        public Airplane()
+        {
+            Disps = new Queue<Dispatcher>();
+            Speed = 0;
+            Height = 0;
+            DispChangeTimer = new System.Timers.Timer();
+            DispChangeTimer.Interval = Interval;
+        }
         public Airplane(Dispatcher disp)
         {
             Disps = new Queue<Dispatcher>();
@@ -25,11 +34,16 @@ namespace airplane
             Height = 0;
             Disps.Enqueue(disp);
             DispChangeTimer = new System.Timers.Timer();
-            DispChangeTimer.Interval = 1000;
+            DispChangeTimer.Interval = Interval;
         }
 
         public void Fly()
         {
+            if (Disps.Count == 0)
+            {
+                Console.WriteLine("There is no dispatchers!");
+                return;
+            }
             ConsoleKeyInfo keyInfo = Console.ReadKey();
             Console.TreatControlCAsInput = true;
 
@@ -84,7 +98,10 @@ namespace airplane
         public void AddDisp(Dispatcher disp)
         {
             Disps.Enqueue(disp);
-            Disps.Dequeue();
+            if (Disps.Count > 1)
+            {
+                Disps.Dequeue();
+            }           
         }
 
         public override string ToString()
@@ -113,11 +130,18 @@ namespace airplane
         }
     }
 
-    public class AirplaneCrashedException : Exception
+    class AirplaneCrashedException : Exception
     {
         public AirplaneCrashedException() { }
 
         public AirplaneCrashedException(string message)
+            : base(message) { }
+    }
+    class UnfitToFlyException : Exception
+    {
+        public UnfitToFlyException() { }
+
+        public UnfitToFlyException(string message)
             : base(message) { }
     }
 }

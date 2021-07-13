@@ -14,7 +14,7 @@ namespace airplane
         public event StatusChangeHandler ParamChange;
 
         public Timer DispChangeTimer;
-        private int Interval = 15000;
+        private int Interval = 4000;
         public Queue<Dispatcher> Disps { get; set; }
         public int Speed { get; private set; }
         public int Height { get; private set; }
@@ -62,11 +62,12 @@ namespace airplane
                     Speed -= 50;
                 }                
             }
-            else if (keyInfo.Modifiers.HasFlag(ConsoleModifiers.Shift) && keyInfo.Key == ConsoleKey.UpArrow)
+            else if (keyInfo.Key == ConsoleKey.W)
             {
                 Speed += 150;
+                
             }
-            else if (keyInfo.Modifiers.HasFlag(ConsoleModifiers.Shift) && keyInfo.Key == ConsoleKey.DownArrow)
+            else if (keyInfo.Key == ConsoleKey.S)
             {
                 if (Speed - 150 >= 0)
                 {
@@ -84,11 +85,11 @@ namespace airplane
                     Height -= 250;
                 }                
             }
-            else if (keyInfo.Modifiers.HasFlag(ConsoleModifiers.Shift) && keyInfo.Key == ConsoleKey.PageUp)
+            else if (keyInfo.Key == ConsoleKey.Q)
             {
                 Height += 500;
             }
-            else if (keyInfo.Modifiers.HasFlag(ConsoleModifiers.Shift) && keyInfo.Key == ConsoleKey.PageDown)
+            else if (keyInfo.Key == ConsoleKey.A)
             {
                 if (Height - 500 >= 0)
                 {
@@ -96,7 +97,10 @@ namespace airplane
                 }              
             }
 
-            ParamChange?.Invoke(this);
+            if (DispChangeTimer.Enabled == true)
+            {
+                ParamChange?.Invoke(this);
+            }          
 
         }
         public void AddDisp(Dispatcher disp)

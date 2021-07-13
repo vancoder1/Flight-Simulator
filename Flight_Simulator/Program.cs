@@ -28,12 +28,13 @@ namespace Flight_Simulator
             airplane.AddDisp(dispatchers[counter]);
             AirplaneInterface apI = new AirplaneInterface();
             bool flag = true;
-
-            airplane.ParamChange += dispatchers[counter].Check;
+            
             airplane.DispChangeTimer.Elapsed += (source, e) => AirFlight(source, e,
                         airplane, dispatchers, ref counter);
             airplane.DispChangeTimer.Elapsed += (source, e) => apI.PrintAirplaneInfo(airplane, dispatchers[counter]);
-            airplane.DispChangeTimer.Enabled = true;           
+            airplane.DispChangeTimer.Enabled = true;
+            airplane.ParamChange += dispatchers[counter].Check;
+            Console.WriteLine("Start of the game");
             do
             {
                 try
@@ -52,6 +53,7 @@ namespace Flight_Simulator
                 }
                 catch (AirplaneCrashedException)
                 {
+                    Console.Clear();
                     Console.WriteLine("\tAirplane crashed");
                     apI.PrintEndOfGame(airplane, false);
                     flag = false;
@@ -59,6 +61,7 @@ namespace Flight_Simulator
                 }
                 catch (UnfitToFlyException)
                 {
+                    Console.Clear();
                     Console.WriteLine("Unfit to fly");
                     apI.PrintEndOfGame(airplane, false);
                     flag = false;

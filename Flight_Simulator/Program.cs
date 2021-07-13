@@ -39,21 +39,20 @@ namespace Flight_Simulator
                 try
                 {
                     if (airplane.DispChangeTimer.Enabled == false)
-                    {                       
-                        apI.PrintEndOfGame(airplane);
-                        flag = false;
-                        break;
-                    }                    
-                    else if (counter < dispatchers.Count)
                     {
-                        airplane.Fly();
+                        flag = false;
+                        return;
+                    }
+                    airplane.Fly();
+                    if (airplane.DispChangeTimer.Enabled == true)
+                    {
                         apI.PrintAirplaneInfo(airplane, dispatchers[counter]);
                         Console.WriteLine("\t" + dispatchers[counter].Check(airplane));
-                    }                    
+                    }
                 }
                 catch (AirplaneCrashedException)
                 {
-                    Console.WriteLine("Airplane crashed");
+                    Console.WriteLine("\tAirplane crashed");
                     apI.PrintEndOfGame(airplane, false);
                     flag = false;
                     break;
@@ -71,15 +70,17 @@ namespace Flight_Simulator
         static void AirFlight(Object source, System.Timers.ElapsedEventArgs e, Airplane airplane,
             List<Dispatcher> dispatchers, ref int counter)
         {
+            counter++;
             if (counter < dispatchers.Count)
-            {
-                counter++;
+            {                
                 airplane.AddDisp(dispatchers[counter]);
                 dispatchers[counter].Check(airplane);
                 return;
             }
             else
             {
+                AirplaneInterface apI = new AirplaneInterface();
+                apI.PrintEndOfGame(airplane, true);
                 airplane.DispChangeTimer.Enabled = false;
             }
         }

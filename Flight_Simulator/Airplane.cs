@@ -39,6 +39,10 @@ namespace airplane
 
         public void Fly()
         {
+            if (DispChangeTimer.Enabled == false)
+            {
+                return;
+            }
             if (Disps.Count == 0)
             {
                 Console.WriteLine("There is no dispatchers!");

@@ -42,11 +42,12 @@ namespace dispatcher
             {
                 throw new AirplaneCrashedException();
             }
-            else if (ap.Height > 0 && ap.Speed == 0)
+
+            if (ap.Height > 0 && ap.Speed == 0)
             {
                 throw new AirplaneCrashedException();
             }
-            else if (ap.Penalty_points > 1000)
+            if (ap.Penalty_points > 1000)
             {
                 throw new UnfitToFlyException();
             }

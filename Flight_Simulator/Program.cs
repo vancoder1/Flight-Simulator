@@ -13,6 +13,7 @@ namespace Flight_Simulator
     {
         static void Main(string[] args)
         {
+            int counter = 0;
             List<Dispatcher> dispatchers = new List<Dispatcher>() {
                 new Dispatcher("London dispatcher"),
                 new Dispatcher("Berlin dispatcher"),
@@ -24,24 +25,27 @@ namespace Flight_Simulator
             Airplane airplane = new Airplane(dispatchers[0]);
             AirplaneInterface apI = new AirplaneInterface();
             bool flag = true;
-            int counter = 0;
-            airplane.DispChangeTimer.Elapsed += (source, e) => AirFlight(source, e,
-                        airplane, dispatchers, counter);
-            airplane.DispChangeTimer.Start();
 
             airplane.ParamChange += dispatchers[counter].Check;
+            airplane.DispChangeTimer.Elapsed += (source, e) => AirFlight(source, e,
+                        airplane, dispatchers, ref counter);
+            airplane.DispChangeTimer.Start();           
             do
             {
                 try
                 {
-                    if (counter == -1)
+                    if (airplane.DispChangeTimer.Enabled == false)
                     {                       
                         apI.PrintEndOfGame(airplane);
                         flag = false;
                         break;
-                    }
-                    airplane.Fly();
-                    apI.PrintAirplaneInfo(airplane, dispatchers[counter]);
+                    }                    
+                    else if (counter < dispatchers.Count)
+                    {
+                        airplane.Fly();
+                        apI.PrintAirplaneInfo(airplane, dispatchers[counter]);
+                        Console.WriteLine("\t" + dispatchers[counter].Check(airplane));
+                    }                    
                 }
                 catch (AirplaneCrashedException)
                 {
@@ -54,15 +58,18 @@ namespace Flight_Simulator
             
         }            
         static void AirFlight(Object source, System.Timers.ElapsedEventArgs e, Airplane airplane,
-            List<Dispatcher> dispatchers, int counter)
+            List<Dispatcher> dispatchers, ref int counter)
         {
-            if (counter >= dispatchers.Count)
+            if (counter < dispatchers.Count)
             {
-                counter = -1;
+                counter++;
+                airplane.AddDisp(dispatchers[counter]);
                 return;
             }
-            counter++;
-            airplane.AddDisp(dispatchers[counter]);
+            else
+            {
+                airplane.DispChangeTimer.Stop();
+            }
         }
     }
 }

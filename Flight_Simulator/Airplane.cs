@@ -25,7 +25,7 @@ namespace airplane
             Height = 0;
             Disps.Enqueue(disp);
             DispChangeTimer = new System.Timers.Timer();
-            DispChangeTimer.Interval = 2000;
+            DispChangeTimer.Interval = 1000;
         }
 
         public void Fly()
@@ -97,11 +97,10 @@ namespace airplane
     {
         public void PrintAirplaneInfo(Airplane ap, Dispatcher disp)
         {
-            Console.Clear();
-
-            Console.WriteLine($"\n{disp.Name} message: \n\tRecommended height: {disp.Recommended_Height}");
+            Console.Clear();           
             Console.WriteLine("\nCurrent Height: " + ap.Height);
             Console.WriteLine("Current Speed: " + ap.Speed);
+            Console.WriteLine($"\n{disp.Name} message: \n\tRecommended height: {disp.Recommended_Height}");
         }
         public void PrintEndOfGame(Airplane ap, bool clean = true)
         {

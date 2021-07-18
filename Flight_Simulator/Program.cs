@@ -56,14 +56,17 @@ namespace Flight_Simulator
                     Console.Clear();
                     Console.WriteLine("\tAirplane crashed");
                     apI.PrintEndOfGame(airplane, false);
-                    flag = false;
-                    break;
+                    return;
                 }
                 catch (UnfitToFlyException)
                 {
                     Console.Clear();
                     Console.WriteLine("Unfit to fly");
                     apI.PrintEndOfGame(airplane, false);
+                    return;
+                }
+                catch (ArgumentOutOfRangeException)
+                {
                     flag = false;
                     break;
                 }

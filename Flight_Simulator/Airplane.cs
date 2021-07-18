@@ -14,7 +14,7 @@ namespace airplane
         public event StatusChangeHandler ParamChange;
 
         public Timer DispChangeTimer;
-        private int Interval = 4000;
+        private int Interval = 2000;
         public Queue<Dispatcher> Disps { get; set; }
         public int Speed { get; private set; }
         public int Height { get; private set; }
@@ -45,7 +45,7 @@ namespace airplane
             }
             if (Disps.Count == 0)
             {
-                Console.WriteLine("There is no dispatchers!");
+                Console.WriteLine("There are no dispatchers!");
                 return;
             }
             ConsoleKeyInfo keyInfo = Console.ReadKey();
@@ -62,11 +62,13 @@ namespace airplane
                     Speed -= 50;
                 }                
             }
+            // Вместо SHIFT + UpArrow
             else if (keyInfo.Key == ConsoleKey.W)
             {
                 Speed += 150;
                 
             }
+            // Вместо SHIFT + DownArrow
             else if (keyInfo.Key == ConsoleKey.S)
             {
                 if (Speed - 150 >= 0)
@@ -85,10 +87,12 @@ namespace airplane
                     Height -= 250;
                 }                
             }
+            // Вместо SHIFT + PageUp
             else if (keyInfo.Key == ConsoleKey.Q)
             {
                 Height += 500;
             }
+            // Вместо SHIFT + PageDown
             else if (keyInfo.Key == ConsoleKey.A)
             {
                 if (Height - 500 >= 0)
@@ -132,9 +136,11 @@ namespace airplane
             if (clean == true)
             {
                 Console.Clear();
-            }          
+            }
+            Console.WriteLine("Press any key to exit\n");
             Console.WriteLine("\t\tGame ended");
             Console.WriteLine("\t\tPenalty points: " + ap.Penalty_points);
+            Console.ReadKey();
         }
     }
 
